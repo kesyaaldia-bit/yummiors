@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yummior</title>
+    <link rel="stylesheet" href="about.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <section class="menu">
+        <div class="nav">
+            <div class="logo"><h1>Yum<b>mior</b></h1></div>
+            
+            <!-- Tambahkan toggle menu untuk mobile -->
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a class="active" href="#">Home</a></li>
+                <li><a href="#">About us</a></li>
+                <li><a href="#">Review</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <!--   <input class="signin" type="submit" value="Sign In" name="singin">
+                <input class="signup"  type="submit" value="Sign Up" name="singup"> -->
+            </div>
+        </div>
+    </section>
+    <main>
+  <section class="grid">
+        <div class="content">
+            <div class="content-left">
+                <div class="info">
+                    <h2>Order Your Best <br>Food anytime</h2>
+                    <p>Hey, Our delicious food is waiting for you, <br>
+                            We are always near to you with fresh item of food</p>
+              </div>
+                <!--  <button>Explore Food</button> -->
+            </div>
+            <div class="content-right">
+                <img src="img/main.png" alt="">
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <section class="category">
+            <div class="list-items">
+                <h3>Our Menu</h3>
+                <div class="card-list">
+                    <div class="card">
+                        <img src="img/food1.jpg" alt="">
+                        <div class="food-title">
+                            <h1>Fire Mix Platter</h1>
+                        </div>
+                        <div class="desc-food">
+                            <p>A perfect duo of Korean flavors — fresh and savory kimbap rolls paired with crispy, 
+                                bite-sized chicken popcorn. Light yet satisfying, this combo brings together the best 
+                                of wholesome taste and crunchy indulgence.</p>
+                        </div>
+                        <div class="price">
+                            <span>Rp14.000</span><span><i class='bx bxs-plus-circle plus-icon'  onclick="addToCart('Fire Mix Platter', 15000)"></i></span>
+                        </div>
+                    </div>
+                     <div class="card">
+                        <img src="img/food2.jpg" alt="">
+                        <div class="food-title">
+                            <h1>Pangsit Chilo</h1>
+                        </div>
+                        <div class="desc-food">
+                            <p>Delicate steamed dumplings served with a rich, spicy chili oil that adds a bold kick
+                            to every bite. Soft, savory, and full of flavor, it’s the perfect blend of comfort and heat.</p>
+                        </div>
+                        <div class="price">
+                            <span>Rp12.000</span><span><i class='bx bxs-plus-circle plus-icon'  onclick="addToCart('Pangsit Chilo', 15000)"></i></span>
+                        </div>
+                    </div>
+                     <div class="card">
+                        <img src="img/food4.jpg" alt="">
+                        <div class="food-title">
+                            <h1>Pudot</h1>
+                        </div>
+                        <div class="desc-food">
+                            <p>A smooth and creamy chocolate pudding made to be enjoyed with every sip. Rich,
+                                 sweet, and refreshing — the perfect treat for chocolate lovers on the go. 
+                                 Perfect for dessert time or a quick mood booster anytime.</p>
+                        </div>
+                        <div class="price">
+                            <span>Rp10.0o0</span><span><i class='bx bxs-plus-circle plus-icon'  onclick="addToCart('Pudot', 15000)"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+
+    <!-- 🛒 Keranjang -->
+<div class="cart" id="cart">
+  <h3>🛒 Keranjang</h3>
+  <div id="cart-items"></div>
+  <hr>
+  <p>Total: Rp <span id="cart-total">0</span></p>
+  <button class="btn btn-checkout" onclick="checkout()">Proses Pembayaran</button>
+</div>
+</main>
+
+<script>
+ 
+   // Toggle menu mobile
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenu.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        });
+
+
+  let cart = [];
+
+  function addToCart(name, price) {
+    let item = cart.find(i => i.name === name);
+    if (item) {
+      item.qty++;
+    } else {
+      cart.push({ name, price, qty: 1 });
+    }
+    renderCart();
+  }
+
+  function renderCart() {
+    let cartItems = document.getElementById("cart-items");
+    let total = 0;
+    cartItems.innerHTML = "";
+
+    cart.forEach((item, index) => {
+      total += item.price * item.qty;
+      cartItems.innerHTML += `
+        <div class="cart-item">
+          ${item.name} x${item.qty} - Rp ${(item.price * item.qty).toLocaleString()}
+          <button onclick="removeItem(${index})">🗑</button>
+        </div>
+      `;
+    });
+
+    document.getElementById("cart-total").innerText = total.toLocaleString();
+  }
+
+  function removeItem(index) {
+    cart.splice(index, 1);
+    renderCart();
+  }
+
+  function checkout() {
+    if (cart.length === 0) {
+      alert("Keranjang masih kosong!");
+      return;
+    }
+
+    let message = "Halo, saya ingin pesan:\n";
+    let total = 0;
+
+    cart.forEach(item => {
+      message += `- ${item.name} x${item.qty} = Rp ${(item.price * item.qty).toLocaleString()}\n`;
+      total += item.price * item.qty;
+    });
+
+    message += `\nTotal: Rp ${total.toLocaleString()}`;
+
+    let phone = "6281246538456"; // Ganti nomor WA kamu
+    let url = `https://wa.me/6281246538456?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+  }
+</script>
+
+
+
+</body>
+</html>
+
